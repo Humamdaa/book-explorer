@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
 
-      title: 'Reader',
+      title: 'Book Explorer',
 
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
