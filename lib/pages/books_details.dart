@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:reader_tracker/db/database_helper.dart';
 import 'package:reader_tracker/models/book.dart';

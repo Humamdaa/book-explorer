@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:reader_tracker/models/book.dart';
 
@@ -32,12 +32,12 @@ class Network {
         },
       );
 
-      print('Open Library URL: $uri');
+      debugPrint('Open Library URL: $uri');
 
       final response = await http.get(uri);
 
-      print('Status Code: ${response.statusCode}');
-      print('Response length: ${response.body.length}');
+      debugPrint('Status Code: ${response.statusCode}');
+      debugPrint('Response length: ${response.body.length}');
 
       if (response.statusCode != 200) {
         throw Exception(
@@ -63,7 +63,7 @@ class Network {
             try {
               return Book.fromJson(book);
             } catch (e) {
-              print('Error parsing book: $e');
+              debugPrint('Error parsing book: $e');
               return null;
             }
           })
@@ -72,7 +72,7 @@ class Network {
 
       return books;
     } catch (e) {
-      print('Network error: $e');
+      debugPrint('Network error: $e');
       rethrow;
     }
   }
