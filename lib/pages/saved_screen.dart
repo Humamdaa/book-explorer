@@ -4,19 +4,14 @@ import 'package:reader_tracker/models/book.dart';
 import 'package:reader_tracker/utils/book_details_arguments.dart';
 
 class SavedScreen extends StatefulWidget {
-  const SavedScreen({
-    super.key,
-  });
+  const SavedScreen({super.key});
 
   @override
-  State<SavedScreen> createState() =>
-      _SavedScreenState();
+  State<SavedScreen> createState() => _SavedScreenState();
 }
 
-class _SavedScreenState
-    extends State<SavedScreen> {
-  late Future<List<Book>>
-      _booksFuture;
+class _SavedScreenState extends State<SavedScreen> {
+  late Future<List<Book>> _booksFuture;
 
   // ============================================================
   // Lifecycle
@@ -28,20 +23,12 @@ class _SavedScreenState
 
     _loadBooks();
 
-    DatabaseHelper
-        .instance.changes
-        .addListener(
-      _onDatabaseChanged,
-    );
+    DatabaseHelper.instance.changes.addListener(_onDatabaseChanged);
   }
 
   @override
   void dispose() {
-    DatabaseHelper
-        .instance.changes
-        .removeListener(
-      _onDatabaseChanged,
-    );
+    DatabaseHelper.instance.changes.removeListener(_onDatabaseChanged);
 
     super.dispose();
   }
@@ -57,9 +44,7 @@ class _SavedScreenState
   // ============================================================
 
   void _loadBooks() {
-    _booksFuture =
-        DatabaseHelper.instance
-            .readAllBooks();
+    _booksFuture = DatabaseHelper.instance.readAllBooks();
   }
 
   void _refresh() {
@@ -72,17 +57,10 @@ class _SavedScreenState
   // Favorite
   // ============================================================
 
-  Future<void> _toggleFavorite(
-    Book book,
-  ) async {
-    final newStatus =
-        !book.isFavorite;
+  Future<void> _toggleFavorite(Book book) async {
+    final newStatus = !book.isFavorite;
 
-    await DatabaseHelper.instance
-        .toggleFavoriteStatus(
-      book.id,
-      newStatus,
-    );
+    await DatabaseHelper.instance.toggleFavoriteStatus(book.id, newStatus);
 
     if (!mounted) return;
 
@@ -94,45 +72,26 @@ class _SavedScreenState
             children: [
               Icon(
                 newStatus
-                    ? Icons
-                        .favorite_rounded
-                    : Icons
-                        .favorite_border_rounded,
+                    ? Icons.favorite_rounded
+                    : Icons.favorite_border_rounded,
                 color: Colors.white,
               ),
 
-              const SizedBox(
-                width: 10,
-              ),
+              const SizedBox(width: 10),
 
-              Text(
-                newStatus
-                    ? 'Added to favorites'
-                    : 'Removed from favorites',
-              ),
+              Text(newStatus ? 'Added to favorites' : 'Removed from favorites'),
             ],
           ),
 
-          behavior:
-              SnackBarBehavior.floating,
+          behavior: SnackBarBehavior.floating,
 
-          margin:
-              const EdgeInsets.all(
-            16,
+          margin: const EdgeInsets.all(16),
+
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
           ),
 
-          shape:
-              RoundedRectangleBorder(
-            borderRadius:
-                BorderRadius.circular(
-              14,
-            ),
-          ),
-
-          duration:
-              const Duration(
-            seconds: 2,
-          ),
+          duration: const Duration(seconds: 2),
         ),
       );
   }
@@ -141,13 +100,8 @@ class _SavedScreenState
   // Delete
   // ============================================================
 
-  Future<void> _deleteBook(
-    Book book,
-  ) async {
-    await DatabaseHelper.instance
-        .deleteBook(
-      book.id,
-    );
+  Future<void> _deleteBook(Book book) async {
+    await DatabaseHelper.instance.deleteBook(book.id);
 
     if (!mounted) return;
 
@@ -157,23 +111,14 @@ class _SavedScreenState
         const SnackBar(
           content: Row(
             children: [
-              Icon(
-                Icons
-                    .delete_outline_rounded,
-                color: Colors.white,
-              ),
+              Icon(Icons.delete_outline_rounded, color: Colors.white),
               SizedBox(width: 10),
-              Text(
-                'Book removed from your library',
-              ),
+              Text('Book removed from your library'),
             ],
           ),
-          behavior:
-              SnackBarBehavior.floating,
-          margin:
-              EdgeInsets.all(16),
-          duration:
-              Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+          margin: EdgeInsets.all(16),
+          duration: Duration(seconds: 2),
         ),
       );
   }
@@ -182,17 +127,11 @@ class _SavedScreenState
   // Details
   // ============================================================
 
-  void _openDetails(
-    Book book,
-  ) {
+  void _openDetails(Book book) {
     Navigator.pushNamed(
       context,
       '/details',
-      arguments:
-          BookDetailsArguments(
-        itemBook: book,
-        isFromSavedScreen: true,
-      ),
+      arguments: BookDetailsArguments(itemBook: book, isFromSavedScreen: true),
     );
   }
 
@@ -201,30 +140,20 @@ class _SavedScreenState
   // ============================================================
 
   @override
-  Widget build(
-    BuildContext context,
-  ) {
-    final theme =
-        Theme.of(context);
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
 
-    final colorScheme =
-        theme.colorScheme;
+    final colorScheme = theme.colorScheme;
 
     return Scaffold(
-      backgroundColor:
-          colorScheme.surface,
+      backgroundColor: colorScheme.surface,
 
       body: SafeArea(
-        child:
-            FutureBuilder<List<Book>>(
+        child: FutureBuilder<List<Book>>(
           future: _booksFuture,
 
-          builder: (
-            context,
-            snapshot,
-          ) {
-            final books =
-                snapshot.data ?? [];
+          builder: (context, snapshot) {
+            final books = snapshot.data ?? [];
 
             return Column(
               children: [
@@ -232,24 +161,12 @@ class _SavedScreenState
                 // Header
                 // ===============================================
 
-                _LibraryHeader(
-                  count:
-                      snapshot.hasData
-                          ? books.length
-                          : null,
-                ),
+                _LibraryHeader(count: snapshot.hasData ? books.length : null),
 
                 // ===============================================
                 // Content
                 // ===============================================
-
-                Expanded(
-                  child:
-                      _buildContent(
-                    snapshot,
-                    books,
-                  ),
-                ),
+                Expanded(child: _buildContent(snapshot, books)),
               ],
             );
           },
@@ -258,67 +175,38 @@ class _SavedScreenState
     );
   }
 
-  Widget _buildContent(
-    AsyncSnapshot<List<Book>>
-        snapshot,
-    List<Book> books,
-  ) {
-    if (snapshot.connectionState ==
-        ConnectionState.waiting) {
-      return const Center(
-        child:
-            CircularProgressIndicator(),
-      );
+  Widget _buildContent(AsyncSnapshot<List<Book>> snapshot, List<Book> books) {
+    if (snapshot.connectionState == ConnectionState.waiting) {
+      return const Center(child: CircularProgressIndicator());
     }
 
     if (snapshot.hasError) {
       return const _LibraryState(
-        icon: Icons
-            .error_outline_rounded,
-        title:
-            'Something went wrong',
-        message:
-            'Your library could not be loaded.',
+        icon: Icons.error_outline_rounded,
+        title: 'Something went wrong',
+        message: 'Your library could not be loaded.',
       );
     }
 
     if (books.isEmpty) {
       return const _LibraryState(
-        icon:
-            Icons.bookmark_add_outlined,
-        title:
-            'Your library is empty',
-        message:
-            'Save books from Discover and they will appear here.',
+        icon: Icons.bookmark_add_outlined,
+        title: 'Your library is empty',
+        message: 'Save books from Discover and they will appear here.',
       );
     }
 
     return ListView.separated(
-      padding:
-          const EdgeInsets.fromLTRB(
-        20,
-        10,
-        20,
-        24,
-      ),
+      padding: const EdgeInsets.fromLTRB(20, 10, 20, 24),
 
       itemCount: books.length,
 
-      separatorBuilder: (
-        context,
-        index,
-      ) {
-        return const SizedBox(
-          height: 14,
-        );
+      separatorBuilder: (context, index) {
+        return const SizedBox(height: 14);
       },
 
-      itemBuilder: (
-        context,
-        index,
-      ) {
-        final book =
-            books[index];
+      itemBuilder: (context, index) {
+        final book = books[index];
 
         return _LibraryBookCard(
           book: book,
@@ -341,69 +229,44 @@ class _SavedScreenState
 // Header
 // ============================================================
 
-class _LibraryHeader
-    extends StatelessWidget {
+class _LibraryHeader extends StatelessWidget {
   final int? count;
 
-  const _LibraryHeader({
-    required this.count,
-  });
+  const _LibraryHeader({required this.count});
 
   @override
-  Widget build(
-    BuildContext context,
-  ) {
-    final theme =
-        Theme.of(context);
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
 
-    final colorScheme =
-        theme.colorScheme;
+    final colorScheme = theme.colorScheme;
 
     return Padding(
-      padding:
-          const EdgeInsets.fromLTRB(
-        20,
-        18,
-        20,
-        16,
-      ),
+      padding: const EdgeInsets.fromLTRB(20, 18, 20, 16),
 
       child: Row(
         children: [
           Expanded(
             child: Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment
-                      .start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   'My Library',
-                  style: theme
-                      .textTheme
-                      .headlineMedium
-                      ?.copyWith(
-                    fontWeight:
-                        FontWeight.w800,
+                  style: theme.textTheme.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.w800,
                     letterSpacing: -0.5,
                   ),
                 ),
 
-                const SizedBox(
-                  height: 5,
-                ),
+                const SizedBox(height: 5),
 
                 Text(
                   count == null
                       ? 'Your saved collection'
                       : count == 1
-                          ? '1 saved book'
-                          : '$count saved books',
-                  style: theme
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(
-                    color: colorScheme
-                        .onSurfaceVariant,
+                      ? '1 saved book'
+                      : '$count saved books',
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
                   ),
                 ),
               ],
@@ -414,21 +277,14 @@ class _LibraryHeader
             width: 48,
             height: 48,
 
-            decoration:
-                BoxDecoration(
-              color: colorScheme
-                  .primaryContainer,
-              borderRadius:
-                  BorderRadius.circular(
-                16,
-              ),
+            decoration: BoxDecoration(
+              color: colorScheme.primaryContainer,
+              borderRadius: BorderRadius.circular(16),
             ),
 
             child: Icon(
-              Icons
-                  .bookmark_rounded,
-              color: colorScheme
-                  .onPrimaryContainer,
+              Icons.bookmark_rounded,
+              color: colorScheme.onPrimaryContainer,
             ),
           ),
         ],
@@ -441,8 +297,7 @@ class _LibraryHeader
 // Library book card
 // ============================================================
 
-class _LibraryBookCard
-    extends StatelessWidget {
+class _LibraryBookCard extends StatelessWidget {
   final Book book;
 
   final VoidCallback onTap;
@@ -459,41 +314,28 @@ class _LibraryBookCard
   });
 
   @override
-  Widget build(
-    BuildContext context,
-  ) {
-    final theme =
-        Theme.of(context);
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
 
-    final colorScheme =
-        theme.colorScheme;
+    final colorScheme = theme.colorScheme;
 
     return Material(
-      color:
-          colorScheme.surfaceContainerLow,
+      color: colorScheme.surfaceContainerLow,
 
-      borderRadius:
-          BorderRadius.circular(22),
+      borderRadius: BorderRadius.circular(22),
 
-      clipBehavior:
-          Clip.antiAlias,
+      clipBehavior: Clip.antiAlias,
 
       child: InkWell(
         onTap: onTap,
 
-        borderRadius:
-            BorderRadius.circular(
-          22,
-        ),
+        borderRadius: BorderRadius.circular(22),
 
         child: Padding(
-          padding:
-              const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(12),
 
           child: Row(
-            crossAxisAlignment:
-                CrossAxisAlignment
-                    .center,
+            crossAxisAlignment: CrossAxisAlignment.center,
 
             children: [
               // ================================================
@@ -501,121 +343,75 @@ class _LibraryBookCard
               // ================================================
 
               ClipRRect(
-                borderRadius:
-                    BorderRadius.circular(
-                  14,
-                ),
+                borderRadius: BorderRadius.circular(14),
 
-                child: _SavedBookCover(
-                  book: book,
-                ),
+                child: _SavedBookCover(book: book),
               ),
 
-              const SizedBox(
-                width: 15,
-              ),
+              const SizedBox(width: 15),
 
               // ================================================
               // Content
               // ================================================
-
               Expanded(
                 child: Column(
-                  crossAxisAlignment:
-                      CrossAxisAlignment
-                          .start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
 
                   children: [
                     Text(
                       book.title,
                       maxLines: 2,
-                      overflow:
-                          TextOverflow
-                              .ellipsis,
-                      style: theme
-                          .textTheme
-                          .titleMedium
-                          ?.copyWith(
-                        fontWeight:
-                            FontWeight
-                                .w700,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w700,
                         height: 1.2,
                       ),
                     ),
 
-                    const SizedBox(
-                      height: 6,
-                    ),
+                    const SizedBox(height: 6),
 
                     Text(
-                      book.authors
-                              .isNotEmpty
-                          ? book.authors
-                              .join(', ')
+                      book.authors.isNotEmpty
+                          ? book.authors.join(', ')
                           : 'Unknown author',
                       maxLines: 1,
-                      overflow:
-                          TextOverflow
-                              .ellipsis,
-                      style: theme
-                          .textTheme
-                          .bodySmall
-                          ?.copyWith(
-                        color: colorScheme
-                            .onSurfaceVariant,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
                       ),
                     ),
 
-                    const SizedBox(
-                      height: 12,
-                    ),
+                    const SizedBox(height: 12),
 
                     Wrap(
                       spacing: 7,
                       runSpacing: 6,
                       children: [
-                        if (book
-                                .publishedDate !=
-                            null)
+                        if (book.publishedDate != null)
                           _BookMetaChip(
-                            icon: Icons
-                                .calendar_today_rounded,
-                            label: book
-                                .publishedDate!,
+                            icon: Icons.calendar_today_rounded,
+                            label: book.publishedDate!,
                           ),
 
-                        if (book
-                                .pageCount !=
-                            null)
+                        if (book.pageCount != null)
                           _BookMetaChip(
-                            icon: Icons
-                                .auto_stories_outlined,
-                            label:
-                                '${book.pageCount} pages',
+                            icon: Icons.auto_stories_outlined,
+                            label: '${book.pageCount} pages',
                           ),
                       ],
                     ),
 
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    const SizedBox(height: 10),
 
                     Row(
                       children: [
                         InkWell(
-                          onTap:
-                              onFavorite,
+                          onTap: onFavorite,
 
-                          borderRadius:
-                              BorderRadius
-                                  .circular(
-                            10,
-                          ),
+                          borderRadius: BorderRadius.circular(10),
 
                           child: Padding(
-                            padding:
-                                const EdgeInsets
-                                    .symmetric(
+                            padding: const EdgeInsets.symmetric(
                               vertical: 5,
                               horizontal: 3,
                             ),
@@ -624,40 +420,23 @@ class _LibraryBookCard
                               children: [
                                 Icon(
                                   book.isFavorite
-                                      ? Icons
-                                          .favorite_rounded
-                                      : Icons
-                                          .favorite_border_rounded,
+                                      ? Icons.favorite_rounded
+                                      : Icons.favorite_border_rounded,
                                   size: 20,
-                                  color: book
-                                          .isFavorite
-                                      ? Colors
-                                          .red
-                                      : colorScheme
-                                          .onSurfaceVariant,
+                                  color: book.isFavorite
+                                      ? Colors.red
+                                      : colorScheme.onSurfaceVariant,
                                 ),
 
-                                const SizedBox(
-                                  width: 6,
-                                ),
+                                const SizedBox(width: 6),
 
                                 Text(
-                                  book.isFavorite
-                                      ? 'Favorite'
-                                      : 'Add favorite',
-                                  style: theme
-                                      .textTheme
-                                      .labelMedium
-                                      ?.copyWith(
-                                    color: book
-                                            .isFavorite
-                                        ? Colors
-                                            .red
-                                        : colorScheme
-                                            .onSurfaceVariant,
-                                    fontWeight:
-                                        FontWeight
-                                            .w600,
+                                  book.isFavorite ? 'Favorite' : 'Add favorite',
+                                  style: theme.textTheme.labelMedium?.copyWith(
+                                    color: book.isFavorite
+                                        ? Colors.red
+                                        : colorScheme.onSurfaceVariant,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
                               ],
@@ -670,38 +449,24 @@ class _LibraryBookCard
                 ),
               ),
 
-              const SizedBox(
-                width: 8,
-              ),
+              const SizedBox(width: 8),
 
               // ================================================
               // Delete
               // ================================================
-
               IconButton(
-                tooltip:
-                    'Remove from library',
+                tooltip: 'Remove from library',
 
-                onPressed:
-                    onDelete,
+                onPressed: onDelete,
 
-                style:
-                    IconButton.styleFrom(
-                  backgroundColor:
-                      colorScheme
-                          .errorContainer
-                          .withValues(
+                style: IconButton.styleFrom(
+                  backgroundColor: colorScheme.errorContainer.withValues(
                     alpha: 0.55,
                   ),
-                  foregroundColor:
-                      colorScheme.error,
+                  foregroundColor: colorScheme.error,
                 ),
 
-                icon: const Icon(
-                  Icons
-                      .delete_outline_rounded,
-                  size: 21,
-                ),
+                icon: const Icon(Icons.delete_outline_rounded, size: 21),
               ),
             ],
           ),
@@ -715,33 +480,23 @@ class _LibraryBookCard
 // Cover
 // ============================================================
 
-class _SavedBookCover
-    extends StatelessWidget {
+class _SavedBookCover extends StatelessWidget {
   final Book book;
 
-  const _SavedBookCover({
-    required this.book,
-  });
+  const _SavedBookCover({required this.book});
 
   @override
-  Widget build(
-    BuildContext context,
-  ) {
-    final colorScheme =
-        Theme.of(context).colorScheme;
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
 
-    if (book.imageLinks == null ||
-        book.imageLinks!.isEmpty) {
+    if (book.imageLinks == null || book.imageLinks!.isEmpty) {
       return Container(
         width: 78,
         height: 112,
-        color:
-            colorScheme.primaryContainer,
+        color: colorScheme.primaryContainer,
         child: Icon(
-          Icons
-              .auto_stories_rounded,
-          color: colorScheme
-              .onPrimaryContainer,
+          Icons.auto_stories_rounded,
+          color: colorScheme.onPrimaryContainer,
           size: 30,
         ),
       );
@@ -753,21 +508,14 @@ class _SavedBookCover
       height: 112,
       fit: BoxFit.cover,
 
-      errorBuilder: (
-        context,
-        error,
-        stackTrace,
-      ) {
+      errorBuilder: (context, error, stackTrace) {
         return Container(
           width: 78,
           height: 112,
-          color: colorScheme
-              .primaryContainer,
+          color: colorScheme.primaryContainer,
           child: Icon(
-            Icons
-                .auto_stories_rounded,
-            color: colorScheme
-                .onPrimaryContainer,
+            Icons.auto_stories_rounded,
+            color: colorScheme.onPrimaryContainer,
             size: 30,
           ),
         );
@@ -780,65 +528,39 @@ class _SavedBookCover
 // Meta chip
 // ============================================================
 
-class _BookMetaChip
-    extends StatelessWidget {
+class _BookMetaChip extends StatelessWidget {
   final IconData icon;
 
   final String label;
 
-  const _BookMetaChip({
-    required this.icon,
-    required this.label,
-  });
+  const _BookMetaChip({required this.icon, required this.label});
 
   @override
-  Widget build(
-    BuildContext context,
-  ) {
-    final theme =
-        Theme.of(context);
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
 
-    final colorScheme =
-        theme.colorScheme;
+    final colorScheme = theme.colorScheme;
 
     return Container(
-      padding:
-          const EdgeInsets.symmetric(
-        horizontal: 8,
-        vertical: 5,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
 
-      decoration:
-          BoxDecoration(
-        color: colorScheme
-            .surfaceContainerHighest,
-        borderRadius:
-            BorderRadius.circular(8),
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(8),
       ),
 
       child: Row(
-        mainAxisSize:
-            MainAxisSize.min,
+        mainAxisSize: MainAxisSize.min,
 
         children: [
-          Icon(
-            icon,
-            size: 13,
-            color: colorScheme
-                .onSurfaceVariant,
-          ),
+          Icon(icon, size: 13, color: colorScheme.onSurfaceVariant),
 
-          const SizedBox(
-            width: 5,
-          ),
+          const SizedBox(width: 5),
 
           Text(
             label,
-            style: theme
-                .textTheme.labelSmall
-                ?.copyWith(
-              color: colorScheme
-                  .onSurfaceVariant,
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: colorScheme.onSurfaceVariant,
             ),
           ),
         ],
@@ -851,8 +573,7 @@ class _BookMetaChip
 // Empty / error state
 // ============================================================
 
-class _LibraryState
-    extends StatelessWidget {
+class _LibraryState extends StatelessWidget {
   final IconData icon;
 
   final String title;
@@ -866,76 +587,52 @@ class _LibraryState
   });
 
   @override
-  Widget build(
-    BuildContext context,
-  ) {
-    final theme =
-        Theme.of(context);
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
 
-    final colorScheme =
-        theme.colorScheme;
+    final colorScheme = theme.colorScheme;
 
     return Center(
       child: Padding(
-        padding:
-            const EdgeInsets.all(32),
+        padding: const EdgeInsets.all(32),
 
         child: Column(
-          mainAxisAlignment:
-              MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
 
           children: [
             Container(
               width: 94,
               height: 94,
 
-              decoration:
-                  BoxDecoration(
-                color: colorScheme
-                    .primaryContainer,
-                borderRadius:
-                    BorderRadius.circular(
-                  30,
-                ),
+              decoration: BoxDecoration(
+                color: colorScheme.primaryContainer,
+                borderRadius: BorderRadius.circular(30),
               ),
 
               child: Icon(
                 icon,
                 size: 42,
-                color: colorScheme
-                    .onPrimaryContainer,
+                color: colorScheme.onPrimaryContainer,
               ),
             ),
 
-            const SizedBox(
-              height: 22,
-            ),
+            const SizedBox(height: 22),
 
             Text(
               title,
-              textAlign:
-                  TextAlign.center,
-              style: theme
-                  .textTheme.titleLarge
-                  ?.copyWith(
-                fontWeight:
-                    FontWeight.w800,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.w800,
               ),
             ),
 
-            const SizedBox(
-              height: 8,
-            ),
+            const SizedBox(height: 8),
 
             Text(
               message,
-              textAlign:
-                  TextAlign.center,
-              style: theme
-                  .textTheme.bodyMedium
-                  ?.copyWith(
-                color: colorScheme
-                    .onSurfaceVariant,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: colorScheme.onSurfaceVariant,
               ),
             ),
           ],

@@ -3,22 +3,15 @@ import 'package:reader_tracker/db/database_helper.dart';
 import 'package:reader_tracker/models/book.dart';
 import 'package:reader_tracker/utils/book_details_arguments.dart';
 
-class FavoritesScreen
-    extends StatefulWidget {
-  const FavoritesScreen({
-    super.key,
-  });
+class FavoritesScreen extends StatefulWidget {
+  const FavoritesScreen({super.key});
 
   @override
-  State<FavoritesScreen>
-      createState() =>
-          _FavoritesScreenState();
+  State<FavoritesScreen> createState() => _FavoritesScreenState();
 }
 
-class _FavoritesScreenState
-    extends State<FavoritesScreen> {
-  late Future<List<Book>>
-      _favoritesFuture;
+class _FavoritesScreenState extends State<FavoritesScreen> {
+  late Future<List<Book>> _favoritesFuture;
 
   // ============================================================
   // Lifecycle
@@ -30,20 +23,12 @@ class _FavoritesScreenState
 
     _loadFavorites();
 
-    DatabaseHelper
-        .instance.changes
-        .addListener(
-      _onDatabaseChanged,
-    );
+    DatabaseHelper.instance.changes.addListener(_onDatabaseChanged);
   }
 
   @override
   void dispose() {
-    DatabaseHelper
-        .instance.changes
-        .removeListener(
-      _onDatabaseChanged,
-    );
+    DatabaseHelper.instance.changes.removeListener(_onDatabaseChanged);
 
     super.dispose();
   }
@@ -59,9 +44,7 @@ class _FavoritesScreenState
   // ============================================================
 
   void _loadFavorites() {
-    _favoritesFuture =
-        DatabaseHelper.instance
-            .getFavorites();
+    _favoritesFuture = DatabaseHelper.instance.getFavorites();
   }
 
   void _refresh() {
@@ -74,14 +57,8 @@ class _FavoritesScreenState
   // Favorite
   // ============================================================
 
-  Future<void> _removeFavorite(
-    Book book,
-  ) async {
-    await DatabaseHelper.instance
-        .toggleFavoriteStatus(
-      book.id,
-      false,
-    );
+  Future<void> _removeFavorite(Book book) async {
+    await DatabaseHelper.instance.toggleFavoriteStatus(book.id, false);
 
     if (!mounted) return;
 
@@ -91,40 +68,23 @@ class _FavoritesScreenState
         SnackBar(
           content: const Row(
             children: [
-              Icon(
-                Icons
-                    .favorite_border_rounded,
-                color: Colors.white,
-              ),
+              Icon(Icons.favorite_border_rounded, color: Colors.white),
 
               SizedBox(width: 10),
 
-              Text(
-                'Removed from favorites',
-              ),
+              Text('Removed from favorites'),
             ],
           ),
 
-          behavior:
-              SnackBarBehavior.floating,
+          behavior: SnackBarBehavior.floating,
 
-          margin:
-              const EdgeInsets.all(
-            16,
+          margin: const EdgeInsets.all(16),
+
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
           ),
 
-          shape:
-              RoundedRectangleBorder(
-            borderRadius:
-                BorderRadius.circular(
-              14,
-            ),
-          ),
-
-          duration:
-              const Duration(
-            seconds: 2,
-          ),
+          duration: const Duration(seconds: 2),
         ),
       );
   }
@@ -133,17 +93,11 @@ class _FavoritesScreenState
   // Details
   // ============================================================
 
-  void _openDetails(
-    Book book,
-  ) {
+  void _openDetails(Book book) {
     Navigator.pushNamed(
       context,
       '/details',
-      arguments:
-          BookDetailsArguments(
-        itemBook: book,
-        isFromSavedScreen: true,
-      ),
+      arguments: BookDetailsArguments(itemBook: book, isFromSavedScreen: true),
     );
   }
 
@@ -152,30 +106,20 @@ class _FavoritesScreenState
   // ============================================================
 
   @override
-  Widget build(
-    BuildContext context,
-  ) {
-    final theme =
-        Theme.of(context);
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
 
-    final colorScheme =
-        theme.colorScheme;
+    final colorScheme = theme.colorScheme;
 
     return Scaffold(
-      backgroundColor:
-          colorScheme.surface,
+      backgroundColor: colorScheme.surface,
 
       body: SafeArea(
-        child:
-            FutureBuilder<List<Book>>(
+        child: FutureBuilder<List<Book>>(
           future: _favoritesFuture,
 
-          builder: (
-            context,
-            snapshot,
-          ) {
-            final books =
-                snapshot.data ?? [];
+          builder: (context, snapshot) {
+            final books = snapshot.data ?? [];
 
             return Column(
               children: [
@@ -183,24 +127,12 @@ class _FavoritesScreenState
                 // Header
                 // ===============================================
 
-                _FavoritesHeader(
-                  count:
-                      snapshot.hasData
-                          ? books.length
-                          : null,
-                ),
+                _FavoritesHeader(count: snapshot.hasData ? books.length : null),
 
                 // ===============================================
                 // Content
                 // ===============================================
-
-                Expanded(
-                  child:
-                      _buildContent(
-                    snapshot,
-                    books,
-                  ),
-                ),
+                Expanded(child: _buildContent(snapshot, books)),
               ],
             );
           },
@@ -209,67 +141,38 @@ class _FavoritesScreenState
     );
   }
 
-  Widget _buildContent(
-    AsyncSnapshot<List<Book>>
-        snapshot,
-    List<Book> books,
-  ) {
-    if (snapshot.connectionState ==
-        ConnectionState.waiting) {
-      return const Center(
-        child:
-            CircularProgressIndicator(),
-      );
+  Widget _buildContent(AsyncSnapshot<List<Book>> snapshot, List<Book> books) {
+    if (snapshot.connectionState == ConnectionState.waiting) {
+      return const Center(child: CircularProgressIndicator());
     }
 
     if (snapshot.hasError) {
       return const _FavoriteState(
-        icon:
-            Icons.error_outline_rounded,
-        title:
-            'Something went wrong',
-        message:
-            'Your favorite books could not be loaded.',
+        icon: Icons.error_outline_rounded,
+        title: 'Something went wrong',
+        message: 'Your favorite books could not be loaded.',
       );
     }
 
     if (books.isEmpty) {
       return const _FavoriteState(
-        icon: Icons
-            .favorite_border_rounded,
-        title:
-            'No favorites yet',
-        message:
-            'Mark books you love and they will stay together here.',
+        icon: Icons.favorite_border_rounded,
+        title: 'No favorites yet',
+        message: 'Mark books you love and they will stay together here.',
       );
     }
 
     return ListView.separated(
-      padding:
-          const EdgeInsets.fromLTRB(
-        20,
-        10,
-        20,
-        24,
-      ),
+      padding: const EdgeInsets.fromLTRB(20, 10, 20, 24),
 
       itemCount: books.length,
 
-      separatorBuilder: (
-        context,
-        index,
-      ) {
-        return const SizedBox(
-          height: 14,
-        );
+      separatorBuilder: (context, index) {
+        return const SizedBox(height: 14);
       },
 
-      itemBuilder: (
-        context,
-        index,
-      ) {
-        final book =
-            books[index];
+      itemBuilder: (context, index) {
+        final book = books[index];
 
         return _FavoriteBookCard(
           book: book,
@@ -291,70 +194,45 @@ class _FavoritesScreenState
 // Header
 // ============================================================
 
-class _FavoritesHeader
-    extends StatelessWidget {
+class _FavoritesHeader extends StatelessWidget {
   final int? count;
 
-  const _FavoritesHeader({
-    required this.count,
-  });
+  const _FavoritesHeader({required this.count});
 
   @override
-  Widget build(
-    BuildContext context,
-  ) {
-    final theme =
-        Theme.of(context);
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
 
-    final colorScheme =
-        theme.colorScheme;
+    final colorScheme = theme.colorScheme;
 
     return Padding(
-      padding:
-          const EdgeInsets.fromLTRB(
-        20,
-        18,
-        20,
-        16,
-      ),
+      padding: const EdgeInsets.fromLTRB(20, 18, 20, 16),
 
       child: Row(
         children: [
           Expanded(
             child: Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment
-                      .start,
+              crossAxisAlignment: CrossAxisAlignment.start,
 
               children: [
                 Text(
                   'Favorites',
-                  style: theme
-                      .textTheme
-                      .headlineMedium
-                      ?.copyWith(
-                    fontWeight:
-                        FontWeight.w800,
+                  style: theme.textTheme.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.w800,
                     letterSpacing: -0.5,
                   ),
                 ),
 
-                const SizedBox(
-                  height: 5,
-                ),
+                const SizedBox(height: 5),
 
                 Text(
                   count == null
                       ? 'Books worth coming back to'
                       : count == 1
-                          ? '1 favorite book'
-                          : '$count favorite books',
-                  style: theme
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(
-                    color: colorScheme
-                        .onSurfaceVariant,
+                      ? '1 favorite book'
+                      : '$count favorite books',
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
                   ),
                 ),
               ],
@@ -365,21 +243,14 @@ class _FavoritesHeader
             width: 48,
             height: 48,
 
-            decoration:
-                BoxDecoration(
-              color: colorScheme
-                  .errorContainer,
-              borderRadius:
-                  BorderRadius.circular(
-                16,
-              ),
+            decoration: BoxDecoration(
+              color: colorScheme.errorContainer,
+              borderRadius: BorderRadius.circular(16),
             ),
 
             child: Icon(
-              Icons
-                  .favorite_rounded,
-              color: colorScheme
-                  .onErrorContainer,
+              Icons.favorite_rounded,
+              color: colorScheme.onErrorContainer,
             ),
           ),
         ],
@@ -392,8 +263,7 @@ class _FavoritesHeader
 // Favorite card
 // ============================================================
 
-class _FavoriteBookCard
-    extends StatelessWidget {
+class _FavoriteBookCard extends StatelessWidget {
   final Book book;
 
   final VoidCallback onTap;
@@ -407,38 +277,25 @@ class _FavoriteBookCard
   });
 
   @override
-  Widget build(
-    BuildContext context,
-  ) {
-    final theme =
-        Theme.of(context);
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
 
-    final colorScheme =
-        theme.colorScheme;
+    final colorScheme = theme.colorScheme;
 
     return Material(
-      color:
-          colorScheme.surfaceContainerLow,
+      color: colorScheme.surfaceContainerLow,
 
-      borderRadius:
-          BorderRadius.circular(22),
+      borderRadius: BorderRadius.circular(22),
 
-      clipBehavior:
-          Clip.antiAlias,
+      clipBehavior: Clip.antiAlias,
 
       child: InkWell(
         onTap: onTap,
 
-        borderRadius:
-            BorderRadius.circular(
-          22,
-        ),
+        borderRadius: BorderRadius.circular(22),
 
         child: Padding(
-          padding:
-              const EdgeInsets.all(
-            12,
-          ),
+          padding: const EdgeInsets.all(12),
 
           child: Row(
             children: [
@@ -447,104 +304,63 @@ class _FavoriteBookCard
               // ================================================
 
               ClipRRect(
-                borderRadius:
-                    BorderRadius.circular(
-                  14,
-                ),
+                borderRadius: BorderRadius.circular(14),
 
-                child:
-                    _FavoriteBookCover(
-                  book: book,
-                ),
+                child: _FavoriteBookCover(book: book),
               ),
 
-              const SizedBox(
-                width: 15,
-              ),
+              const SizedBox(width: 15),
 
               // ================================================
               // Info
               // ================================================
-
               Expanded(
                 child: Column(
-                  crossAxisAlignment:
-                      CrossAxisAlignment
-                          .start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
 
                   children: [
                     Text(
                       book.title,
                       maxLines: 2,
-                      overflow:
-                          TextOverflow
-                              .ellipsis,
-                      style: theme
-                          .textTheme
-                          .titleMedium
-                          ?.copyWith(
-                        fontWeight:
-                            FontWeight
-                                .w700,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w700,
                         height: 1.2,
                       ),
                     ),
 
-                    const SizedBox(
-                      height: 7,
-                    ),
+                    const SizedBox(height: 7),
 
                     Text(
-                      book.authors
-                              .isNotEmpty
-                          ? book.authors
-                              .join(', ')
+                      book.authors.isNotEmpty
+                          ? book.authors.join(', ')
                           : 'Unknown author',
                       maxLines: 1,
-                      overflow:
-                          TextOverflow
-                              .ellipsis,
-                      style: theme
-                          .textTheme
-                          .bodySmall
-                          ?.copyWith(
-                        color: colorScheme
-                            .onSurfaceVariant,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
                       ),
                     ),
 
-                    const SizedBox(
-                      height: 12,
-                    ),
+                    const SizedBox(height: 12),
 
                     Row(
                       children: [
                         Icon(
-                          Icons
-                              .calendar_today_rounded,
+                          Icons.calendar_today_rounded,
                           size: 14,
-                          color: colorScheme
-                              .onSurfaceVariant,
+                          color: colorScheme.onSurfaceVariant,
                         ),
 
-                        const SizedBox(
-                          width: 6,
-                        ),
+                        const SizedBox(width: 6),
 
                         Expanded(
                           child: Text(
-                            book.publishedDate ??
-                                'Publication date unknown',
+                            book.publishedDate ?? 'Publication date unknown',
                             maxLines: 1,
-                            overflow:
-                                TextOverflow
-                                    .ellipsis,
-                            style: theme
-                                .textTheme
-                                .labelMedium
-                                ?.copyWith(
-                              color: colorScheme
-                                  .onSurfaceVariant,
+                            overflow: TextOverflow.ellipsis,
+                            style: theme.textTheme.labelMedium?.copyWith(
+                              color: colorScheme.onSurfaceVariant,
                             ),
                           ),
                         ),
@@ -554,35 +370,22 @@ class _FavoriteBookCard
                 ),
               ),
 
-              const SizedBox(
-                width: 8,
-              ),
+              const SizedBox(width: 8),
 
               // ================================================
               // Favorite button
               // ================================================
-
               IconButton(
-                tooltip:
-                    'Remove from favorites',
+                tooltip: 'Remove from favorites',
 
-                onPressed:
-                    onRemove,
+                onPressed: onRemove,
 
-                style:
-                    IconButton.styleFrom(
-                  backgroundColor:
-                      colorScheme
-                          .errorContainer,
-                  foregroundColor:
-                      colorScheme
-                          .onErrorContainer,
+                style: IconButton.styleFrom(
+                  backgroundColor: colorScheme.errorContainer,
+                  foregroundColor: colorScheme.onErrorContainer,
                 ),
 
-                icon: const Icon(
-                  Icons.favorite_rounded,
-                  size: 22,
-                ),
+                icon: const Icon(Icons.favorite_rounded, size: 22),
               ),
             ],
           ),
@@ -596,33 +399,23 @@ class _FavoriteBookCard
 // Cover
 // ============================================================
 
-class _FavoriteBookCover
-    extends StatelessWidget {
+class _FavoriteBookCover extends StatelessWidget {
   final Book book;
 
-  const _FavoriteBookCover({
-    required this.book,
-  });
+  const _FavoriteBookCover({required this.book});
 
   @override
-  Widget build(
-    BuildContext context,
-  ) {
-    final colorScheme =
-        Theme.of(context).colorScheme;
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
 
-    if (book.imageLinks == null ||
-        book.imageLinks!.isEmpty) {
+    if (book.imageLinks == null || book.imageLinks!.isEmpty) {
       return Container(
         width: 78,
         height: 112,
-        color:
-            colorScheme.primaryContainer,
+        color: colorScheme.primaryContainer,
         child: Icon(
-          Icons
-              .auto_stories_rounded,
-          color: colorScheme
-              .onPrimaryContainer,
+          Icons.auto_stories_rounded,
+          color: colorScheme.onPrimaryContainer,
           size: 30,
         ),
       );
@@ -634,21 +427,14 @@ class _FavoriteBookCover
       height: 112,
       fit: BoxFit.cover,
 
-      errorBuilder: (
-        context,
-        error,
-        stackTrace,
-      ) {
+      errorBuilder: (context, error, stackTrace) {
         return Container(
           width: 78,
           height: 112,
-          color: colorScheme
-              .primaryContainer,
+          color: colorScheme.primaryContainer,
           child: Icon(
-            Icons
-                .auto_stories_rounded,
-            color: colorScheme
-                .onPrimaryContainer,
+            Icons.auto_stories_rounded,
+            color: colorScheme.onPrimaryContainer,
             size: 30,
           ),
         );
@@ -661,8 +447,7 @@ class _FavoriteBookCover
 // Empty / error state
 // ============================================================
 
-class _FavoriteState
-    extends StatelessWidget {
+class _FavoriteState extends StatelessWidget {
   final IconData icon;
 
   final String title;
@@ -676,76 +461,48 @@ class _FavoriteState
   });
 
   @override
-  Widget build(
-    BuildContext context,
-  ) {
-    final theme =
-        Theme.of(context);
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
 
-    final colorScheme =
-        theme.colorScheme;
+    final colorScheme = theme.colorScheme;
 
     return Center(
       child: Padding(
-        padding:
-            const EdgeInsets.all(32),
+        padding: const EdgeInsets.all(32),
 
         child: Column(
-          mainAxisAlignment:
-              MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
 
           children: [
             Container(
               width: 94,
               height: 94,
 
-              decoration:
-                  BoxDecoration(
-                color: colorScheme
-                    .errorContainer,
-                borderRadius:
-                    BorderRadius.circular(
-                  30,
-                ),
+              decoration: BoxDecoration(
+                color: colorScheme.errorContainer,
+                borderRadius: BorderRadius.circular(30),
               ),
 
-              child: Icon(
-                icon,
-                size: 42,
-                color: colorScheme
-                    .onErrorContainer,
-              ),
+              child: Icon(icon, size: 42, color: colorScheme.onErrorContainer),
             ),
 
-            const SizedBox(
-              height: 22,
-            ),
+            const SizedBox(height: 22),
 
             Text(
               title,
-              textAlign:
-                  TextAlign.center,
-              style: theme
-                  .textTheme.titleLarge
-                  ?.copyWith(
-                fontWeight:
-                    FontWeight.w800,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.w800,
               ),
             ),
 
-            const SizedBox(
-              height: 8,
-            ),
+            const SizedBox(height: 8),
 
             Text(
               message,
-              textAlign:
-                  TextAlign.center,
-              style: theme
-                  .textTheme.bodyMedium
-                  ?.copyWith(
-                color: colorScheme
-                    .onSurfaceVariant,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: colorScheme.onSurfaceVariant,
               ),
             ),
           ],

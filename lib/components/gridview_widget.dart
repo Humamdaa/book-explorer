@@ -5,23 +5,14 @@ import 'package:reader_tracker/utils/book_details_arguments.dart';
 class GridViewWidget extends StatelessWidget {
   final List<Book> books;
 
-  const GridViewWidget({
-    super.key,
-    required this.books,
-  });
+  const GridViewWidget({super.key, required this.books});
 
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-      padding: const EdgeInsets.fromLTRB(
-        20,
-        8,
-        20,
-        20,
-      ),
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
 
-      gridDelegate:
-          const SliverGridDelegateWithMaxCrossAxisExtent(
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
         maxCrossAxisExtent: 210,
         mainAxisExtent: 330,
         crossAxisSpacing: 18,
@@ -31,9 +22,7 @@ class GridViewWidget extends StatelessWidget {
       itemCount: books.length,
 
       itemBuilder: (context, index) {
-        return _BookCard(
-          book: books[index],
-        );
+        return _BookCard(book: books[index]);
       },
     );
   }
@@ -42,20 +31,13 @@ class GridViewWidget extends StatelessWidget {
 class _BookCard extends StatelessWidget {
   final Book book;
 
-  const _BookCard({
-    required this.book,
-  });
+  const _BookCard({required this.book});
 
-  void _openDetails(
-    BuildContext context,
-  ) {
+  void _openDetails(BuildContext context) {
     Navigator.pushNamed(
       context,
       '/details',
-      arguments: BookDetailsArguments(
-        itemBook: book,
-        isFromSavedScreen: false,
-      ),
+      arguments: BookDetailsArguments(itemBook: book, isFromSavedScreen: false),
     );
   }
 
@@ -68,15 +50,13 @@ class _BookCard extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: () => _openDetails(context),
-        borderRadius:
-            BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(20),
 
         child: Padding(
           padding: const EdgeInsets.all(2),
 
           child: Column(
-            crossAxisAlignment:
-                CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // ==================================================
               // Book cover
@@ -87,31 +67,19 @@ class _BookCard extends StatelessWidget {
                   width: double.infinity,
 
                   decoration: BoxDecoration(
-                    borderRadius:
-                        BorderRadius.circular(
-                      18,
-                    ),
+                    borderRadius: BorderRadius.circular(18),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black
-                            .withValues(
-                          alpha: 0.08,
-                        ),
+                        color: Colors.black.withValues(alpha: 0.08),
                         blurRadius: 16,
-                        offset:
-                            const Offset(0, 7),
+                        offset: const Offset(0, 7),
                       ),
                     ],
                   ),
 
                   child: ClipRRect(
-                    borderRadius:
-                        BorderRadius.circular(
-                      18,
-                    ),
-                    child: _BookCover(
-                      book: book,
-                    ),
+                    borderRadius: BorderRadius.circular(18),
+                    child: _BookCover(book: book),
                   ),
                 ),
               ),
@@ -121,17 +89,12 @@ class _BookCard extends StatelessWidget {
               // ==================================================
               // Title
               // ==================================================
-
               Text(
                 book.title,
                 maxLines: 2,
-                overflow:
-                    TextOverflow.ellipsis,
-                style: theme
-                    .textTheme.titleSmall
-                    ?.copyWith(
-                  fontWeight:
-                      FontWeight.w700,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.titleSmall?.copyWith(
+                  fontWeight: FontWeight.w700,
                   height: 1.2,
                 ),
               ),
@@ -141,19 +104,14 @@ class _BookCard extends StatelessWidget {
               // ==================================================
               // Author
               // ==================================================
-
               Text(
                 book.authors.isNotEmpty
                     ? book.authors.join(', ')
                     : 'Unknown author',
                 maxLines: 1,
-                overflow:
-                    TextOverflow.ellipsis,
-                style: theme
-                    .textTheme.bodySmall
-                    ?.copyWith(
-                  color: colorScheme
-                      .onSurfaceVariant,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
                 ),
               ),
 
@@ -162,36 +120,24 @@ class _BookCard extends StatelessWidget {
               // ==================================================
               // Published date
               // ==================================================
-
               Row(
                 children: [
                   Container(
-                    padding:
-                        const EdgeInsets.symmetric(
+                    padding: const EdgeInsets.symmetric(
                       horizontal: 8,
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: colorScheme
-                          .surfaceContainerHighest,
-                      borderRadius:
-                          BorderRadius.circular(
-                        8,
-                      ),
+                      color: colorScheme.surfaceContainerHighest,
+                      borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
-                      book.publishedDate ??
-                          'Unknown',
+                      book.publishedDate ?? 'Unknown',
                       maxLines: 1,
-                      overflow:
-                          TextOverflow.ellipsis,
-                      style: theme
-                          .textTheme.labelSmall
-                          ?.copyWith(
-                        color: colorScheme
-                            .onSurfaceVariant,
-                        fontWeight:
-                            FontWeight.w600,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
@@ -199,11 +145,9 @@ class _BookCard extends StatelessWidget {
                   const Spacer(),
 
                   Icon(
-                    Icons
-                        .arrow_forward_rounded,
+                    Icons.arrow_forward_rounded,
                     size: 18,
-                    color:
-                        colorScheme.primary,
+                    color: colorScheme.primary,
                   ),
                 ],
               ),
@@ -218,20 +162,14 @@ class _BookCard extends StatelessWidget {
 class _BookCover extends StatelessWidget {
   final Book book;
 
-  const _BookCover({
-    required this.book,
-  });
+  const _BookCover({required this.book});
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme =
-        Theme.of(context).colorScheme;
+    final colorScheme = Theme.of(context).colorScheme;
 
-    if (book.imageLinks == null ||
-        book.imageLinks!.isEmpty) {
-      return _NoCover(
-        colorScheme: colorScheme,
-      );
+    if (book.imageLinks == null || book.imageLinks!.isEmpty) {
+      return _NoCover(colorScheme: colorScheme);
     }
 
     return Image.network(
@@ -240,14 +178,8 @@ class _BookCover extends StatelessWidget {
       height: double.infinity,
       fit: BoxFit.cover,
 
-      errorBuilder: (
-        context,
-        error,
-        stackTrace,
-      ) {
-        return _NoCover(
-          colorScheme: colorScheme,
-        );
+      errorBuilder: (context, error, stackTrace) {
+        return _NoCover(colorScheme: colorScheme);
       },
     );
   }
@@ -256,38 +188,28 @@ class _BookCover extends StatelessWidget {
 class _NoCover extends StatelessWidget {
   final ColorScheme colorScheme;
 
-  const _NoCover({
-    required this.colorScheme,
-  });
+  const _NoCover({required this.colorScheme});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color:
-          colorScheme.primaryContainer,
+      color: colorScheme.primaryContainer,
       child: Center(
         child: Column(
-          mainAxisAlignment:
-              MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               Icons.auto_stories_rounded,
               size: 52,
-              color: colorScheme
-                  .onPrimaryContainer,
+              color: colorScheme.onPrimaryContainer,
             ),
 
             const SizedBox(height: 10),
 
             Text(
               'No cover',
-              style: Theme.of(context)
-                  .textTheme
-                  .labelMedium
-                  ?.copyWith(
-                color: colorScheme
-                    .onPrimaryContainer,
-              ),
+              style: Theme.of(context).textTheme.labelMedium
+                  ?.copyWith(color: colorScheme.onPrimaryContainer),
             ),
           ],
         ),

@@ -35,9 +35,18 @@ jobs:
 
       - name: Install dependencies
         run: flutter pub get
-
+      
+      - name: Check code formatting
+        run: dart format --output=none --set-exit-if-changed .
+      
       - name: Analyze project
         run: flutter analyze
 
       - name: Build Android APK
         run: flutter build apk --debug
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: book-explorer-debug-apk
+          path: build/app/outputs/flutter-apk/app-debug.apk

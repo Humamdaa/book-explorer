@@ -1,11 +1,11 @@
 import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:reader_tracker/models/book.dart';
 
 class Network {
-  static const String _baseUrl =
-      'https://openlibrary.org/search.json';
+  static const String _baseUrl = 'https://openlibrary.org/search.json';
 
   static const int booksPerPage = 10;
 
@@ -19,10 +19,7 @@ class Network {
   // searches books.
   // ============================================================
 
-  Future<List<Book>> getBooks({
-    String query = '',
-    int page = 1,
-  }) async {
+  Future<List<Book>> getBooks({String query = '', int page = 1}) async {
     try {
       final uri = Uri.parse(_baseUrl).replace(
         queryParameters: {
@@ -40,9 +37,7 @@ class Network {
       debugPrint('Response length: ${response.body.length}');
 
       if (response.statusCode != 200) {
-        throw Exception(
-          'Open Library API error: ${response.statusCode}',
-        );
+        throw Exception('Open Library API error: ${response.statusCode}');
       }
 
       final data = jsonDecode(response.body);
@@ -81,14 +76,8 @@ class Network {
   // Search books
   // ============================================================
 
-  Future<List<Book>> searchBooks(
-    String query, {
-    int page = 1,
-  }) async {
-    return getBooks(
-      query: query,
-      page: page,
-    );
+  Future<List<Book>> searchBooks(String query, {int page = 1}) async {
+    return getBooks(query: query, page: page);
   }
 
   // ============================================================
@@ -96,8 +85,6 @@ class Network {
   // ============================================================
 
   Future<List<Book>> getFirstBooks() async {
-    return getBooks(
-      page: 1,
-    );
+    return getBooks(page: 1);
   }
 }

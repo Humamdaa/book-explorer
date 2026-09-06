@@ -4,22 +4,16 @@ import 'package:reader_tracker/models/book.dart';
 import 'package:reader_tracker/network/network.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({
-    super.key,
-  });
+  const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() =>
-      _HomeScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState
-    extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> {
   final Network network = Network();
 
-  final TextEditingController
-      searchController =
-      TextEditingController();
+  final TextEditingController searchController = TextEditingController();
 
   List<Book> books = [];
 
@@ -57,8 +51,7 @@ class _HomeScreenState
     });
 
     try {
-      final result =
-          await network.getBooks(
+      final result = await network.getBooks(
         query: currentQuery,
         page: currentPage,
       );
@@ -77,29 +70,17 @@ class _HomeScreenState
           SnackBar(
             content: const Row(
               children: [
-                Icon(
-                  Icons
-                      .wifi_off_rounded,
-                  color: Colors.white,
-                ),
+                Icon(Icons.wifi_off_rounded, color: Colors.white),
                 SizedBox(width: 10),
                 Expanded(
-                  child: Text(
-                    'Unable to load books. Check your connection.',
-                  ),
+                  child: Text('Unable to load books. Check your connection.'),
                 ),
               ],
             ),
-            behavior:
-                SnackBarBehavior.floating,
-            margin:
-                const EdgeInsets.all(16),
-            shape:
-                RoundedRectangleBorder(
-              borderRadius:
-                  BorderRadius.circular(
-                14,
-              ),
+            behavior: SnackBarBehavior.floating,
+            margin: const EdgeInsets.all(16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(14),
             ),
           ),
         );
@@ -120,8 +101,7 @@ class _HomeScreenState
     FocusScope.of(context).unfocus();
 
     setState(() {
-      currentQuery =
-          searchController.text.trim();
+      currentQuery = searchController.text.trim();
 
       currentPage = 1;
     });
@@ -145,8 +125,7 @@ class _HomeScreenState
   // ============================================================
 
   void nextPage() {
-    if (books.length <
-        Network.booksPerPage) {
+    if (books.length < Network.booksPerPage) {
       return;
     }
 
@@ -175,15 +154,12 @@ class _HomeScreenState
 
   @override
   Widget build(BuildContext context) {
-    final theme =
-        Theme.of(context);
+    final theme = Theme.of(context);
 
-    final colorScheme =
-        theme.colorScheme;
+    final colorScheme = theme.colorScheme;
 
     return Scaffold(
-      backgroundColor:
-          colorScheme.surface,
+      backgroundColor: colorScheme.surface,
 
       body: SafeArea(
         child: Column(
@@ -193,47 +169,28 @@ class _HomeScreenState
             // ==================================================
 
             Padding(
-              padding:
-                  const EdgeInsets.fromLTRB(
-                20,
-                18,
-                20,
-                6,
-              ),
+              padding: const EdgeInsets.fromLTRB(20, 18, 20, 6),
 
               child: Row(
                 children: [
                   Expanded(
                     child: Column(
-                      crossAxisAlignment:
-                          CrossAxisAlignment
-                              .start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           'Discover',
-                          style: theme
-                              .textTheme
-                              .headlineMedium
-                              ?.copyWith(
-                            fontWeight:
-                                FontWeight.w800,
-                            letterSpacing:
-                                -0.5,
+                          style: theme.textTheme.headlineMedium?.copyWith(
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: -0.5,
                           ),
                         ),
 
-                        const SizedBox(
-                          height: 5,
-                        ),
+                        const SizedBox(height: 5),
 
                         Text(
                           'Find something worth reading today.',
-                          style: theme
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(
-                            color: colorScheme
-                                .onSurfaceVariant,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: colorScheme.onSurfaceVariant,
                           ),
                         ),
                       ],
@@ -243,20 +200,13 @@ class _HomeScreenState
                   Container(
                     width: 48,
                     height: 48,
-                    decoration:
-                        BoxDecoration(
-                      color: colorScheme
-                          .primaryContainer,
-                      borderRadius:
-                          BorderRadius.circular(
-                        16,
-                      ),
+                    decoration: BoxDecoration(
+                      color: colorScheme.primaryContainer,
+                      borderRadius: BorderRadius.circular(16),
                     ),
                     child: Icon(
-                      Icons
-                          .auto_stories_rounded,
-                      color: colorScheme
-                          .onPrimaryContainer,
+                      Icons.auto_stories_rounded,
+                      color: colorScheme.onPrimaryContainer,
                     ),
                   ),
                 ],
@@ -266,45 +216,25 @@ class _HomeScreenState
             // ==================================================
             // Search
             // ==================================================
-
             Padding(
-              padding:
-                  const EdgeInsets.fromLTRB(
-                20,
-                18,
-                20,
-                8,
-              ),
+              padding: const EdgeInsets.fromLTRB(20, 18, 20, 8),
 
               child: Container(
-                decoration:
-                    BoxDecoration(
-                  borderRadius:
-                      BorderRadius.circular(
-                    20,
-                  ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black
-                          .withValues(
-                        alpha: 0.035,
-                      ),
+                      color: Colors.black.withValues(alpha: 0.035),
                       blurRadius: 16,
-                      offset:
-                          const Offset(
-                        0,
-                        5,
-                      ),
+                      offset: const Offset(0, 5),
                     ),
                   ],
                 ),
 
                 child: TextField(
-                  controller:
-                      searchController,
+                  controller: searchController,
 
-                  textInputAction:
-                      TextInputAction.search,
+                  textInputAction: TextInputAction.search,
 
                   onSubmitted: (_) {
                     searchBooks();
@@ -314,80 +244,45 @@ class _HomeScreenState
                     setState(() {});
                   },
 
-                  decoration:
-                      InputDecoration(
-                    hintText:
-                        'Search title or author',
+                  decoration: InputDecoration(
+                    hintText: 'Search title or author',
 
-                    prefixIcon:
-                        Icon(
+                    prefixIcon: Icon(
                       Icons.search_rounded,
-                      color: colorScheme
-                          .onSurfaceVariant,
+                      color: colorScheme.onSurfaceVariant,
                     ),
 
-                    suffixIcon:
-                        searchController
-                                .text
-                                .isNotEmpty
-                            ? IconButton(
-                                tooltip:
-                                    'Clear search',
-                                onPressed:
-                                    clearSearch,
-                                icon:
-                                    const Icon(
-                                  Icons
-                                      .close_rounded,
-                                ),
-                              )
-                            : null,
+                    suffixIcon: searchController.text.isNotEmpty
+                        ? IconButton(
+                            tooltip: 'Clear search',
+                            onPressed: clearSearch,
+                            icon: const Icon(Icons.close_rounded),
+                          )
+                        : null,
 
                     filled: true,
 
-                    fillColor:
-                        colorScheme
-                            .surfaceContainerLow,
+                    fillColor: colorScheme.surfaceContainerLow,
 
-                    border:
-                        OutlineInputBorder(
-                      borderRadius:
-                          BorderRadius.circular(
-                        20,
-                      ),
-                      borderSide:
-                          BorderSide.none,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: BorderSide.none,
                     ),
 
-                    enabledBorder:
-                        OutlineInputBorder(
-                      borderRadius:
-                          BorderRadius.circular(
-                        20,
-                      ),
-                      borderSide:
-                          BorderSide.none,
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: BorderSide.none,
                     ),
 
-                    focusedBorder:
-                        OutlineInputBorder(
-                      borderRadius:
-                          BorderRadius.circular(
-                        20,
-                      ),
-                      borderSide:
-                          BorderSide(
-                        color:
-                            colorScheme.primary,
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: BorderSide(
+                        color: colorScheme.primary,
                         width: 1.5,
                       ),
                     ),
 
-                    contentPadding:
-                        const EdgeInsets
-                            .symmetric(
-                      vertical: 18,
-                    ),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 18),
                   ),
                 ),
               ),
@@ -396,64 +291,36 @@ class _HomeScreenState
             // ==================================================
             // Section title
             // ==================================================
-
             Padding(
-              padding:
-                  const EdgeInsets.fromLTRB(
-                20,
-                16,
-                20,
-                8,
-              ),
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
 
               child: Row(
                 children: [
                   Expanded(
                     child: Text(
-                      currentQuery.isEmpty
-                          ? 'Popular books'
-                          : 'Search results',
-                      style: theme
-                          .textTheme
-                          .titleLarge
-                          ?.copyWith(
-                        fontWeight:
-                            FontWeight.w800,
-                        letterSpacing:
-                            -0.3,
+                      currentQuery.isEmpty ? 'Popular books' : 'Search results',
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: -0.3,
                       ),
                     ),
                   ),
 
-                  if (!isLoading &&
-                      books.isNotEmpty)
+                  if (!isLoading && books.isNotEmpty)
                     Container(
-                      padding:
-                          const EdgeInsets
-                              .symmetric(
+                      padding: const EdgeInsets.symmetric(
                         horizontal: 10,
                         vertical: 6,
                       ),
-                      decoration:
-                          BoxDecoration(
-                        color: colorScheme
-                            .surfaceContainerHighest,
-                        borderRadius:
-                            BorderRadius
-                                .circular(
-                          100,
-                        ),
+                      decoration: BoxDecoration(
+                        color: colorScheme.surfaceContainerHighest,
+                        borderRadius: BorderRadius.circular(100),
                       ),
                       child: Text(
                         '${books.length} books',
-                        style: theme
-                            .textTheme
-                            .labelSmall
-                            ?.copyWith(
-                          fontWeight:
-                              FontWeight.w600,
-                          color: colorScheme
-                              .onSurfaceVariant,
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: colorScheme.onSurfaceVariant,
                         ),
                       ),
                     ),
@@ -464,68 +331,39 @@ class _HomeScreenState
             // ==================================================
             // Current search query
             // ==================================================
-
             if (currentQuery.isNotEmpty)
               Padding(
-                padding:
-                    const EdgeInsets
-                        .fromLTRB(
-                  20,
-                  0,
-                  20,
-                  8,
-                ),
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 8),
                 child: Align(
-                  alignment:
-                      Alignment.centerLeft,
+                  alignment: Alignment.centerLeft,
                   child: Container(
-                    padding:
-                        const EdgeInsets
-                            .symmetric(
+                    padding: const EdgeInsets.symmetric(
                       horizontal: 12,
                       vertical: 7,
                     ),
-                    decoration:
-                        BoxDecoration(
-                      color: colorScheme
-                          .primaryContainer,
-                      borderRadius:
-                          BorderRadius.circular(
-                        100,
-                      ),
+                    decoration: BoxDecoration(
+                      color: colorScheme.primaryContainer,
+                      borderRadius: BorderRadius.circular(100),
                     ),
                     child: Row(
-                      mainAxisSize:
-                          MainAxisSize.min,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(
-                          Icons
-                              .search_rounded,
+                          Icons.search_rounded,
                           size: 15,
-                          color: colorScheme
-                              .onPrimaryContainer,
+                          color: colorScheme.onPrimaryContainer,
                         ),
 
-                        const SizedBox(
-                          width: 6,
-                        ),
+                        const SizedBox(width: 6),
 
                         Flexible(
                           child: Text(
                             currentQuery,
                             maxLines: 1,
-                            overflow:
-                                TextOverflow
-                                    .ellipsis,
-                            style: theme
-                                .textTheme
-                                .labelMedium
-                                ?.copyWith(
-                              color: colorScheme
-                                  .onPrimaryContainer,
-                              fontWeight:
-                                  FontWeight
-                                      .w600,
+                            overflow: TextOverflow.ellipsis,
+                            style: theme.textTheme.labelMedium?.copyWith(
+                              color: colorScheme.onPrimaryContainer,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
@@ -538,96 +376,58 @@ class _HomeScreenState
             // ==================================================
             // Books
             // ==================================================
-
             Expanded(
               child: isLoading
                   ? const _LoadingBooksGrid()
                   : books.isEmpty
-                      ? _EmptyBooks(
-                          isSearch:
-                              currentQuery
-                                  .isNotEmpty,
-                          onRetry:
-                              loadBooks,
-                        )
-                      : GridViewWidget(
-                          books: books,
-                        ),
+                  ? _EmptyBooks(
+                      isSearch: currentQuery.isNotEmpty,
+                      onRetry: loadBooks,
+                    )
+                  : GridViewWidget(books: books),
             ),
 
             // ==================================================
             // Pagination
             // ==================================================
-
-            if (!isLoading &&
-                books.isNotEmpty)
+            if (!isLoading && books.isNotEmpty)
               Padding(
-                padding:
-                    const EdgeInsets
-                        .fromLTRB(
-                  20,
-                  6,
-                  20,
-                  14,
-                ),
+                padding: const EdgeInsets.fromLTRB(20, 6, 20, 14),
 
                 child: Container(
-                  padding:
-                      const EdgeInsets
-                          .symmetric(
+                  padding: const EdgeInsets.symmetric(
                     horizontal: 8,
                     vertical: 7,
                   ),
 
-                  decoration:
-                      BoxDecoration(
-                    color: colorScheme
-                        .surfaceContainerLow,
-                    borderRadius:
-                        BorderRadius.circular(
-                      18,
-                    ),
+                  decoration: BoxDecoration(
+                    color: colorScheme.surfaceContainerLow,
+                    borderRadius: BorderRadius.circular(18),
                   ),
 
                   child: Row(
-                    mainAxisSize:
-                        MainAxisSize.min,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       _PageButton(
-                        icon: Icons
-                            .chevron_left_rounded,
-                        enabled:
-                            currentPage > 1,
-                        onPressed:
-                            previousPage,
+                        icon: Icons.chevron_left_rounded,
+                        enabled: currentPage > 1,
+                        onPressed: previousPage,
                       ),
 
                       Padding(
-                        padding:
-                            const EdgeInsets
-                                .symmetric(
-                          horizontal: 16,
-                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Text(
                           'Page $currentPage',
-                          style: theme
-                              .textTheme
-                              .labelLarge
-                              ?.copyWith(
-                            fontWeight:
-                                FontWeight.w700,
+                          style: theme.textTheme.labelLarge?.copyWith(
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       ),
 
                       _PageButton(
-                        icon: Icons
-                            .chevron_right_rounded,
-                        enabled: books.length >=
-                            Network
-                                .booksPerPage,
-                        onPressed:
-                            nextPage,
+                        icon: Icons.chevron_right_rounded,
+                        enabled: books.length >= Network.booksPerPage,
+                        onPressed: nextPage,
                       ),
                     ],
                   ),
@@ -644,8 +444,7 @@ class _HomeScreenState
 // Page button
 // ============================================================
 
-class _PageButton
-    extends StatelessWidget {
+class _PageButton extends StatelessWidget {
   final IconData icon;
 
   final bool enabled;
@@ -660,22 +459,18 @@ class _PageButton
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme =
-        Theme.of(context).colorScheme;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return IconButton(
-      onPressed:
-          enabled ? onPressed : null,
+      onPressed: enabled ? onPressed : null,
 
       icon: Icon(icon),
 
       style: IconButton.styleFrom(
         backgroundColor: enabled
-            ? colorScheme
-                .surfaceContainerHighest
+            ? colorScheme.surfaceContainerHighest
             : Colors.transparent,
-        foregroundColor:
-            colorScheme.onSurface,
+        foregroundColor: colorScheme.onSurface,
       ),
     );
   }
@@ -685,26 +480,17 @@ class _PageButton
 // Loading state
 // ============================================================
 
-class _LoadingBooksGrid
-    extends StatelessWidget {
+class _LoadingBooksGrid extends StatelessWidget {
   const _LoadingBooksGrid();
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme =
-        Theme.of(context).colorScheme;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return GridView.builder(
-      padding:
-          const EdgeInsets.fromLTRB(
-        20,
-        8,
-        20,
-        20,
-      ),
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
 
-      gridDelegate:
-          const SliverGridDelegateWithMaxCrossAxisExtent(
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
         maxCrossAxisExtent: 210,
         mainAxisExtent: 330,
         crossAxisSpacing: 18,
@@ -713,26 +499,17 @@ class _LoadingBooksGrid
 
       itemCount: 6,
 
-      itemBuilder: (
-        context,
-        index,
-      ) {
+      itemBuilder: (context, index) {
         return Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
               child: Container(
                 width: double.infinity,
 
-                decoration:
-                    BoxDecoration(
-                  color: colorScheme
-                      .surfaceContainerHighest,
-                  borderRadius:
-                      BorderRadius.circular(
-                    18,
-                  ),
+                decoration: BoxDecoration(
+                  color: colorScheme.surfaceContainerHighest,
+                  borderRadius: BorderRadius.circular(18),
                 ),
               ),
             ),
@@ -740,17 +517,11 @@ class _LoadingBooksGrid
             const SizedBox(height: 12),
 
             Container(
-              width:
-                  double.infinity,
+              width: double.infinity,
               height: 14,
-              decoration:
-                  BoxDecoration(
-                color: colorScheme
-                    .surfaceContainerHighest,
-                borderRadius:
-                    BorderRadius.circular(
-                  10,
-                ),
+              decoration: BoxDecoration(
+                color: colorScheme.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(10),
               ),
             ),
 
@@ -759,14 +530,9 @@ class _LoadingBooksGrid
             Container(
               width: 100,
               height: 11,
-              decoration:
-                  BoxDecoration(
-                color: colorScheme
-                    .surfaceContainerHighest,
-                borderRadius:
-                    BorderRadius.circular(
-                  10,
-                ),
+              decoration: BoxDecoration(
+                color: colorScheme.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(10),
               ),
             ),
 
@@ -775,14 +541,9 @@ class _LoadingBooksGrid
             Container(
               width: 55,
               height: 22,
-              decoration:
-                  BoxDecoration(
-                color: colorScheme
-                    .surfaceContainerHighest,
-                borderRadius:
-                    BorderRadius.circular(
-                  8,
-                ),
+              decoration: BoxDecoration(
+                color: colorScheme.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(8),
               ),
             ),
           ],
@@ -796,74 +557,52 @@ class _LoadingBooksGrid
 // Empty state
 // ============================================================
 
-class _EmptyBooks
-    extends StatelessWidget {
+class _EmptyBooks extends StatelessWidget {
   final VoidCallback onRetry;
 
   final bool isSearch;
 
-  const _EmptyBooks({
-    required this.onRetry,
-    required this.isSearch,
-  });
+  const _EmptyBooks({required this.onRetry, required this.isSearch});
 
   @override
   Widget build(BuildContext context) {
-    final theme =
-        Theme.of(context);
+    final theme = Theme.of(context);
 
-    final colorScheme =
-        theme.colorScheme;
+    final colorScheme = theme.colorScheme;
 
     return Center(
       child: SingleChildScrollView(
-        padding:
-            const EdgeInsets.all(30),
+        padding: const EdgeInsets.all(30),
 
         child: Column(
-          mainAxisAlignment:
-              MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
 
           children: [
             Container(
               width: 94,
               height: 94,
 
-              decoration:
-                  BoxDecoration(
-                color: colorScheme
-                    .primaryContainer,
-                borderRadius:
-                    BorderRadius.circular(
-                  30,
-                ),
+              decoration: BoxDecoration(
+                color: colorScheme.primaryContainer,
+                borderRadius: BorderRadius.circular(30),
               ),
 
               child: Icon(
                 isSearch
-                    ? Icons
-                        .search_off_rounded
-                    : Icons
-                        .auto_stories_rounded,
+                    ? Icons.search_off_rounded
+                    : Icons.auto_stories_rounded,
                 size: 42,
-                color: colorScheme
-                    .onPrimaryContainer,
+                color: colorScheme.onPrimaryContainer,
               ),
             ),
 
             const SizedBox(height: 22),
 
             Text(
-              isSearch
-                  ? 'No matching books'
-                  : 'No books available',
-              textAlign:
-                  TextAlign.center,
-              style: theme
-                  .textTheme.titleLarge
-                  ?.copyWith(
-                fontWeight:
-                    FontWeight.w800,
+              isSearch ? 'No matching books' : 'No books available',
+              textAlign: TextAlign.center,
+              style: theme.textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.w800,
               ),
             ),
 
@@ -873,13 +612,9 @@ class _EmptyBooks
               isSearch
                   ? 'Try a different title, author, or keyword.'
                   : 'We could not load books right now.',
-              textAlign:
-                  TextAlign.center,
-              style: theme
-                  .textTheme.bodyMedium
-                  ?.copyWith(
-                color: colorScheme
-                    .onSurfaceVariant,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: colorScheme.onSurfaceVariant,
               ),
             ),
 
@@ -887,13 +622,8 @@ class _EmptyBooks
 
             OutlinedButton.icon(
               onPressed: onRetry,
-              icon: const Icon(
-                Icons.refresh_rounded,
-              ),
-              label:
-                  const Text(
-                'Try again',
-              ),
+              icon: const Icon(Icons.refresh_rounded),
+              label: const Text('Try again'),
             ),
           ],
         ),

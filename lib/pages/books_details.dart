@@ -7,12 +7,10 @@ class BookDetailsScreen extends StatefulWidget {
   const BookDetailsScreen({super.key});
 
   @override
-  State<BookDetailsScreen> createState() =>
-      _BookDetailsScreenState();
+  State<BookDetailsScreen> createState() => _BookDetailsScreenState();
 }
 
-class _BookDetailsScreenState
-    extends State<BookDetailsScreen> {
+class _BookDetailsScreenState extends State<BookDetailsScreen> {
   bool isSaving = false;
 
   Future<void> saveBook(Book book) async {
@@ -29,10 +27,7 @@ class _BookDetailsScreenState
         SnackBar(
           content: const Row(
             children: [
-              Icon(
-                Icons.check_circle_rounded,
-                color: Colors.white,
-              ),
+              Icon(Icons.check_circle_rounded, color: Colors.white),
               SizedBox(width: 10),
               Text('Book added to your library'),
             ],
@@ -51,9 +46,7 @@ class _BookDetailsScreenState
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text(
-            'Could not save this book',
-          ),
+          content: const Text('Could not save this book'),
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(14),
@@ -73,12 +66,10 @@ class _BookDetailsScreenState
   @override
   Widget build(BuildContext context) {
     final args =
-        ModalRoute.of(context)?.settings.arguments
-            as BookDetailsArguments;
+        ModalRoute.of(context)?.settings.arguments as BookDetailsArguments;
 
     final Book book = args.itemBook;
-    final bool isFromSavedScreen =
-        args.isFromSavedScreen;
+    final bool isFromSavedScreen = args.isFromSavedScreen;
 
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
@@ -87,9 +78,7 @@ class _BookDetailsScreenState
       backgroundColor: colorScheme.surface,
 
       appBar: AppBar(
-        title: const Text(
-          'Book Details',
-        ),
+        title: const Text('Book Details'),
 
         centerTitle: true,
 
@@ -100,20 +89,13 @@ class _BookDetailsScreenState
           if (isFromSavedScreen)
             IconButton(
               onPressed: () {},
-              icon: const Icon(
-                Icons.favorite_border_rounded,
-              ),
+              icon: const Icon(Icons.favorite_border_rounded),
             ),
         ],
       ),
 
       body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(
-          20,
-          10,
-          20,
-          30,
-        ),
+        padding: const EdgeInsets.fromLTRB(20, 10, 20, 30),
 
         child: Column(
           children: [
@@ -127,9 +109,7 @@ class _BookDetailsScreenState
 
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(
-                      alpha: 0.18,
-                    ),
+                    color: Colors.black.withValues(alpha: 0.18),
                     blurRadius: 20,
                     offset: const Offset(0, 10),
                   ),
@@ -138,22 +118,16 @@ class _BookDetailsScreenState
 
               clipBehavior: Clip.antiAlias,
 
-              child: book.imageLinks != null &&
-                      book.imageLinks!.isNotEmpty
+              child: book.imageLinks != null && book.imageLinks!.isNotEmpty
                   ? Image.network(
                       book.imageLinks!,
                       fit: BoxFit.cover,
 
-                      errorBuilder:
-                          (context, error, stackTrace) {
-                        return _DetailsNoCover(
-                          colorScheme: colorScheme,
-                        );
+                      errorBuilder: (context, error, stackTrace) {
+                        return _DetailsNoCover(colorScheme: colorScheme);
                       },
                     )
-                  : _DetailsNoCover(
-                      colorScheme: colorScheme,
-                    ),
+                  : _DetailsNoCover(colorScheme: colorScheme),
             ),
 
             const SizedBox(height: 25),
@@ -184,29 +158,24 @@ class _BookDetailsScreenState
 
             // Information
             Row(
-              mainAxisAlignment:
-                  MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 _InfoItem(
                   icon: Icons.calendar_month_rounded,
                   title: 'Published',
-                  value:
-                      book.publishedDate ?? 'Unknown',
+                  value: book.publishedDate ?? 'Unknown',
                 ),
 
                 _InfoItem(
                   icon: Icons.menu_book_rounded,
                   title: 'Pages',
-                  value:
-                      book.pageCount?.toString() ??
-                          'Unknown',
+                  value: book.pageCount?.toString() ?? 'Unknown',
                 ),
 
                 _InfoItem(
                   icon: Icons.language_rounded,
                   title: 'Language',
-                  value:
-                      book.language ?? 'Unknown',
+                  value: book.language ?? 'Unknown',
                 ),
               ],
             ),
@@ -219,32 +188,21 @@ class _BookDetailsScreenState
                 width: double.infinity,
                 height: 52,
                 child: ElevatedButton.icon(
-                  onPressed:
-                      isSaving ? null : () => saveBook(book),
+                  onPressed: isSaving ? null : () => saveBook(book),
 
                   icon: isSaving
                       ? const SizedBox(
                           width: 20,
                           height: 20,
-                          child:
-                              CircularProgressIndicator(
-                            strokeWidth: 2,
-                          ),
+                          child: CircularProgressIndicator(strokeWidth: 2),
                         )
-                      : const Icon(
-                          Icons.bookmark_add_rounded,
-                        ),
+                      : const Icon(Icons.bookmark_add_rounded),
 
-                  label: Text(
-                    isSaving
-                        ? 'Saving...'
-                        : 'Save to My Library',
-                  ),
+                  label: Text(isSaving ? 'Saving...' : 'Save to My Library'),
 
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(16),
                     ),
                   ),
                 ),
@@ -257,8 +215,7 @@ class _BookDetailsScreenState
               alignment: Alignment.centerLeft,
               child: Text(
                 'About this book',
-                style:
-                    theme.textTheme.titleLarge?.copyWith(
+                style: theme.textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -271,16 +228,13 @@ class _BookDetailsScreenState
               padding: const EdgeInsets.all(18),
 
               decoration: BoxDecoration(
-                color:
-                    colorScheme.surfaceContainerHighest,
+                color: colorScheme.surfaceContainerHighest,
                 borderRadius: BorderRadius.circular(18),
               ),
 
               child: Text(
-                book.description ??
-                    'No description available for this book.',
-                style:
-                    theme.textTheme.bodyMedium?.copyWith(
+                book.description ?? 'No description available for this book.',
+                style: theme.textTheme.bodyMedium?.copyWith(
                   height: 1.6,
                   color: colorScheme.onSurfaceVariant,
                 ),
@@ -311,11 +265,7 @@ class _InfoItem extends StatelessWidget {
 
     return Column(
       children: [
-        Icon(
-          icon,
-          color: colorScheme.primary,
-          size: 23,
-        ),
+        Icon(icon, color: colorScheme.primary, size: 23),
 
         const SizedBox(height: 6),
 
@@ -344,9 +294,7 @@ class _InfoItem extends StatelessWidget {
 class _DetailsNoCover extends StatelessWidget {
   final ColorScheme colorScheme;
 
-  const _DetailsNoCover({
-    required this.colorScheme,
-  });
+  const _DetailsNoCover({required this.colorScheme});
 
   @override
   Widget build(BuildContext context) {

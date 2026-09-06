@@ -4,8 +4,7 @@ import 'package:reader_tracker/models/book.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
-  static const String _databaseName =
-      'book_database.db';
+  static const String _databaseName = 'book_database.db';
 
   static const int _databaseVersion = 1;
 
@@ -13,8 +12,7 @@ class DatabaseHelper {
 
   DatabaseHelper._privateConstructor();
 
-  static final DatabaseHelper instance =
-      DatabaseHelper._privateConstructor();
+  static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
 
   static Database? _database;
 
@@ -22,8 +20,7 @@ class DatabaseHelper {
   // Database changes notifier
   // ============================================================
 
-  final ValueNotifier<int> changes =
-      ValueNotifier<int>(0);
+  final ValueNotifier<int> changes = ValueNotifier<int>(0);
 
   void _notifyChanges() {
     changes.value++;
@@ -44,26 +41,16 @@ class DatabaseHelper {
   }
 
   Future<Database> _initDatabase() async {
-    final String path = join(
-      await getDatabasesPath(),
-      _databaseName,
-    );
+    final String path = join(await getDatabasesPath(), _databaseName);
 
-    return openDatabase(
-      path,
-      version: _databaseVersion,
-      onCreate: _onCreate,
-    );
+    return openDatabase(path, version: _databaseVersion, onCreate: _onCreate);
   }
 
   // ============================================================
   // Create table
   // ============================================================
 
-  Future<void> _onCreate(
-    Database db,
-    int version,
-  ) async {
+  Future<void> _onCreate(Database db, int version) async {
     await db.execute('''
       CREATE TABLE $_tableName (
         id TEXT PRIMARY KEY,
@@ -93,8 +80,7 @@ class DatabaseHelper {
     final result = await db.insert(
       _tableName,
       book.toJson(),
-      conflictAlgorithm:
-          ConflictAlgorithm.ignore,
+      conflictAlgorithm: ConflictAlgorithm.ignore,
     );
 
     if (result > 0) {
@@ -111,34 +97,21 @@ class DatabaseHelper {
   Future<List<Book>> readAllBooks() async {
     final db = await database;
 
-    final books = await db.query(
-      _tableName,
-      orderBy: 'rowid DESC',
-    );
+    final books = await db.query(_tableName, orderBy: 'rowid DESC');
 
-    return books
-        .map(
-          (bookData) =>
-              Book.fromJsonDatabase(bookData),
-        )
-        .toList();
+    return books.map((bookData) => Book.fromJsonDatabase(bookData)).toList();
   }
 
   // ============================================================
   // Update favorite
   // ============================================================
 
-  Future<int> toggleFavoriteStatus(
-    String id,
-    bool isFavorite,
-  ) async {
+  Future<int> toggleFavoriteStatus(String id, bool isFavorite) async {
     final db = await database;
 
     final result = await db.update(
       _tableName,
-      {
-        'favorite': isFavorite ? 1 : 0,
-      },
+      {'favorite': isFavorite ? 1 : 0},
       where: 'id = ?',
       whereArgs: [id],
     );
@@ -184,21 +157,14 @@ class DatabaseHelper {
       orderBy: 'rowid DESC',
     );
 
-    return favBooks
-        .map(
-          (bookData) =>
-              Book.fromJsonDatabase(bookData),
-        )
-        .toList();
+    return favBooks.map((bookData) => Book.fromJsonDatabase(bookData)).toList();
   }
 
   // ============================================================
   // Check favorite status
   // ============================================================
 
-  Future<bool> isBookFavorite(
-    String id,
-  ) async {
+  Future<bool> isBookFavorite(String id) async {
     final db = await database;
 
     final result = await db.query(

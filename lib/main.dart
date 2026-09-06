@@ -19,18 +19,12 @@ class MyApp extends StatelessWidget {
       title: 'Book Explorer',
 
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.deepOrange,
-        ),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
         useMaterial3: true,
 
-        scaffoldBackgroundColor:
-            Colors.transparent,
+        scaffoldBackgroundColor: Colors.transparent,
 
-        appBarTheme: const AppBarTheme(
-          centerTitle: true,
-          elevation: 0,
-        ),
+        appBarTheme: const AppBarTheme(centerTitle: true, elevation: 0),
       ),
 
       initialRoute: '/',
@@ -38,10 +32,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/home': (context) => const HomeScreen(),
         '/saved': (context) => const SavedScreen(),
-        '/favorites': (context) =>
-            const FavoritesScreen(),
-        '/details': (context) =>
-            const BookDetailsScreen(),
+        '/favorites': (context) => const FavoritesScreen(),
+        '/details': (context) => const BookDetailsScreen(),
       },
 
       home: const MyHomePage(),
@@ -53,8 +45,7 @@ class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
 
   @override
-  State<MyHomePage> createState() =>
-      _MyHomePageState();
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -68,8 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme =
-        Theme.of(context).colorScheme;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
       // IMPORTANT:
@@ -77,50 +67,33 @@ class _MyHomePageState extends State<MyHomePage> {
       //
       // HomeScreen has its own header.
       // Saved/Favorites have their own AppBars.
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _screens,
-      ),
+      body: IndexedStack(index: _currentIndex, children: _screens),
 
       bottomNavigationBar: NavigationBar(
         selectedIndex: _currentIndex,
 
-        backgroundColor:
-            colorScheme.surface,
+        backgroundColor: colorScheme.surface,
 
-        indicatorColor:
-            colorScheme.primaryContainer,
+        indicatorColor: colorScheme.primaryContainer,
 
         height: 70,
 
         destinations: const [
           NavigationDestination(
-            icon: Icon(
-              Icons.home_outlined,
-            ),
-            selectedIcon: Icon(
-              Icons.home_rounded,
-            ),
+            icon: Icon(Icons.home_outlined),
+            selectedIcon: Icon(Icons.home_rounded),
             label: 'Home',
           ),
 
           NavigationDestination(
-            icon: Icon(
-              Icons.bookmark_border_rounded,
-            ),
-            selectedIcon: Icon(
-              Icons.bookmark_rounded,
-            ),
+            icon: Icon(Icons.bookmark_border_rounded),
+            selectedIcon: Icon(Icons.bookmark_rounded),
             label: 'Saved',
           ),
 
           NavigationDestination(
-            icon: Icon(
-              Icons.favorite_border_rounded,
-            ),
-            selectedIcon: Icon(
-              Icons.favorite_rounded,
-            ),
+            icon: Icon(Icons.favorite_border_rounded),
+            selectedIcon: Icon(Icons.favorite_rounded),
             label: 'Favorites',
           ),
         ],
