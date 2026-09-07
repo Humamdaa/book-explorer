@@ -3,7 +3,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:label="reader_tracker"
+        android:label="Book Explorer"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 
